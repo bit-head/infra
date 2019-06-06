@@ -1,1 +1,1 @@
-ami =
+ami=ami-0ff1e6e6135d43394
