@@ -32,21 +32,16 @@
 #2019-01-01: Mostly cloudy until evening.
 #2019-01-02: Mostly cloudy until evening.
 #2019-01-03: Foggy overnight.
-#
-#
-#
 
-## 3 days in seconds
-days=259200
+my_ip=$( curl -4 http://ifconfig.io/ )
 
-
-curl -s http://ipinfo.io/ > ipinfo.json
-
-my_ip=$( cat ipinfo.json | jq '.ip' )
 ip=${1:-$my_ip}
+# get ip info
+curl -s http://ipinfo.io/${ip} > ipinfo.json
 
 loc=$( cat ipinfo.json | jq ''.loc'' | sed -e 's/\"//g' )
 
+# get weather
 curl -s "https://api.darksky.net/forecast/6ce2cb95ebf7afee7f2d76afcc037fb3/${loc}" > weather.json
 
 epoch_now=$( date +%s )
