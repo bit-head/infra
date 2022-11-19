@@ -1,0 +1,1 @@
+ microk8s kubectl create ingress beast-ingress --annotation cert-manager.io/cluster-issuer=letsencrypt --rule 'beast.bit-head.com/*=beast:80,tls=my-service-tls'

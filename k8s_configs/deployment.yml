@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beastiary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+    app: beastiary
+  template:
+    metadata:
+    labels:
+      app: beastiary
+      label-key : beastiary-key
+   spec:
+     containers:
+       - name: beastiary-container
+         image: nginx:latest
+         imagePullPolicy: Always
+         ports:
+         - containerPort: 80
