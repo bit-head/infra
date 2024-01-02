@@ -1,0 +1,45 @@
+pipeline {
+    agent {
+        kubernetes {
+            // Use the Docker image as the build environment
+            yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    some-label: some-label-value
+spec:
+  containers:
+  - name: jnlp
+    image: jenkins/jnlp-slave:latest
+    args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+    volumeMounts:
+    - mountPath: /home/jenkins
+      name: workspace-volume
+  - name: crawler
+    image: your-crawler-image:latest
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - mountPath: /home/jenkins
+      name: workspace-volume
+  volumes:
+  - name: workspace-volume
+    emptyDir: {}
+"""
+        }
+    }
+    stages {
+        stage('Crawl CNN') {
+            steps {
+                container('crawler') {
+                    sh '''
+                    # Your crawling command here, for example:
+                    python3 crawl.py --source https://www.cnn.com
+                    '''
+                }
+            }
+        }
+    }
+}
